@@ -1,7 +1,9 @@
-package assignment.infosys.com.infosysassignment;
+package assignment.infosys.com.infosysassignment.root;
 
 import android.app.Application;
 import android.content.Context;
+
+import assignment.infosys.com.infosysassignment.http.ApiModule;
 
 /**
  * Created by user on 03-Mar-18.
@@ -14,7 +16,7 @@ public class BaseApplication extends Application {
 
     private static Context appContext;
     public static BaseApplication mInstance;
-
+    private ApplicationComponent component;
     public static BaseApplication getInstance() {
         if (mInstance == null) {
             mInstance = new BaseApplication();
@@ -35,7 +37,9 @@ public class BaseApplication extends Application {
         super.onCreate();
 
         appContext = getApplicationContext();
-
+        component = DaggerApplicationComponent.builder()
+                .apiModule(new ApiModule())
+                .build();
     }
 
 

@@ -1,4 +1,4 @@
-package assignment.infosys.com.infosysassignment;
+package assignment.infosys.com.infosysassignment.root;
 
 
 import android.content.Context;
@@ -14,7 +14,8 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.widget.FrameLayout;
 
-
+import assignment.infosys.com.infosysassignment.R;
+import assignment.infosys.com.infosysassignment.custom_control.CustLoader;
 
 
 public abstract class BaseActivity extends AppCompatActivity implements IFragmentCallback {
@@ -22,6 +23,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IFragmen
 
     protected Fragment currentFrag;
     private static final String SHARED_PREFS = "APP_PREFS";
+
     public static float dpToPx(Context context, float valueInDp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
@@ -30,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IFragmen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
      }
 
 

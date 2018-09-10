@@ -1,4 +1,4 @@
-package assignment.infosys.com.infosysassignment;
+package assignment.infosys.com.infosysassignment.root;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

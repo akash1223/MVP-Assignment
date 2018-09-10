@@ -2,6 +2,7 @@ package assignment.infosys.com.infosysassignment.dropbox;
 
 
 
+import assignment.infosys.com.infosysassignment.apimodel.Facts;
 import rx.Observable;
 
 /**
@@ -9,5 +10,6 @@ import rx.Observable;
  */
 
 public interface Repository {
+    Observable<Facts> getFactsFromNetwork();
 
 }
