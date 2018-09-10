@@ -1,5 +1,7 @@
 package assignment.infosys.com.infosysassignment.dropbox;
 
+import java.util.List;
+
 import assignment.infosys.com.infosysassignment.apimodel.Facts;
 import assignment.infosys.com.infosysassignment.root.BasePresenter;
 import assignment.infosys.com.infosysassignment.root.BaseView;
@@ -9,8 +11,8 @@ public class DropBoxContractMVP {
 
     interface View extends BaseView
     {
-        void updateData(Facts viewModel);
-
+        void updateActionbar(String title);
+        void updateList(List<Facts.Data> mList);
     }
     interface Presenter extends BasePresenter
     {

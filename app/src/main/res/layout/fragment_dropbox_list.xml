@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
-    android:paddingTop="@dimen/activity_horizontal_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
+
+    android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -18,36 +18,31 @@
         android:textSize="@dimen/text_size_medium_material"
         app:layout_constraintStart_toStartOf="parent"
         />
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#666666"
-        android:textSize="@dimen/text_size_small_material"
-        android:layout_marginTop="5sp"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        app:layout_constraintRight_toLeftOf="@+id/guideline"
-        />
+
+
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="#666666"
+            android:textSize="@dimen/text_size_small_material"
+            app:layout_constraintEnd_toStartOf="@+id/img_place_holder"
+            app:layout_constraintStart_toStartOf="@+id/tv_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            tools:text="@string/item_description" />
 
 
     <ImageView
         android:id="@+id/img_place_holder"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/img_place_holder"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
 
-        app:layout_constraintLeft_toRightOf="@+id/guideline"
         />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.6" />
+
 
 
 </android.support.constraint.ConstraintLayout>

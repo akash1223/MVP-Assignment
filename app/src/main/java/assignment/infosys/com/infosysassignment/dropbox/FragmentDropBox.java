@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +37,11 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
     private List<Facts.Data> resultList=new ArrayList<>();
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
+
+
     private Unbinder unbinder;
 
     @Inject
@@ -68,13 +74,24 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+       // super.onViewCreated(view, savedInstanceState);
         listAdapter=new BropboxRecyclerViewAdapter(resultList);
         recyclerView.setAdapter(listAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.loaddata();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
 
     }
@@ -108,12 +125,18 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
 
 
     @Override
-    public void updateData(Facts mFacts) {
-        iFragmentCallback.toolbarTitle(mFacts.getTitle());
-        resultList.addAll(mFacts.getData());
+    public void updateActionbar(String title) {
+        iFragmentCallback.toolbarTitle(title);
+
+    }
+    @Override
+    public void updateList(List<Facts.Data> mList) {
+        if(swipeContainer.isRefreshing())
+        swipeContainer.setRefreshing(false);
+        resultList.clear();
+        resultList.addAll(mList);
         listAdapter.notifyDataSetChanged();
     }
-
     @Override
     public void showProgressIndicator(boolean show) {
         if(show)
