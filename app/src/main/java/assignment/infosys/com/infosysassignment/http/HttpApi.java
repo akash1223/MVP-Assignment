@@ -15,9 +15,9 @@ import rx.Observable;
 
 public interface HttpApi {
 
-    String BASE_ENDPOINT="https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl";
+    String BASE_ENDPOINT="https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json";
 
-    @GET("/facts.json")
+    @GET()
     Observable<Facts> getFacts();
 
 }

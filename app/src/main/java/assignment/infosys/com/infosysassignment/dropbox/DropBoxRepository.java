@@ -10,9 +10,9 @@ public class DropBoxRepository implements Repository {
 
 
     HttpApi mHttpApi;
-    public DropBoxRepository()
+    public DropBoxRepository(HttpApi mHttpApi)
     {
-
+      this.mHttpApi=mHttpApi;
     }
 
     @Override

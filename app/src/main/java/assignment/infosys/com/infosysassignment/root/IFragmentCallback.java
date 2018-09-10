@@ -12,15 +12,8 @@ import android.support.v4.app.Fragment;
 public interface IFragmentCallback {
     void onFragmentLoadRequest(Fragment fragment, String tag, boolean addToBackStack, boolean animate);
 
-    void onBackSimulateFromFragment();
-
     void onDataReceivedFromFragment(Bundle bundle);
 
-    void onDataReceivedFromFragment(BaseFragment baseFragment, Bundle bundle);
+    void toolbarTitle(String title);
 
-    void toolbarTitleAndBackButton(String title, boolean showBackButton, boolean hideToolbar);
-
-    void bottomBarSelectionFromFragment(int itemId);
-
-    void currentFragment(String tag);
 }

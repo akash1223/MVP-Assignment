@@ -38,9 +38,12 @@ public class BaseApplication extends Application {
 
         appContext = getApplicationContext();
         component = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
                 .apiModule(new ApiModule())
                 .build();
     }
-
+    public ApplicationComponent getComponent() {
+        return component;
+    }
 
 }

@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 
 import assignment.infosys.com.infosysassignment.R;
 import assignment.infosys.com.infosysassignment.custom_control.CustLoader;
+import assignment.infosys.com.infosysassignment.http.HttpApi;
 
 
 public abstract class BaseActivity extends AppCompatActivity implements IFragmentCallback {
@@ -23,7 +24,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IFragmen
 
     protected Fragment currentFrag;
     private static final String SHARED_PREFS = "APP_PREFS";
-
+    protected HttpApi networkApiCall;
     public static float dpToPx(Context context, float valueInDp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
@@ -35,52 +36,20 @@ public abstract class BaseActivity extends AppCompatActivity implements IFragmen
 
      }
 
-
     protected SharedPreferences getMyPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         return sharedPreferences;
     }
 
 
-    public BaseApplication getApplicationContext() {
-        return ((BaseApplication) super.getApplicationContext());
-    }
-
-    protected void loadFragment(Fragment fragment, String tag) {
-        loadFragment(fragment, tag, false, false);
-    }
 
     protected void loadFragment(Fragment fragment, String tag, boolean addToBackStack, boolean animate) {
         loadFragment(getSupportFragmentManager(), fragment, tag, addToBackStack, R.id.fl_container, false, animate);
     }
 
-    protected void loadFragmentFromFragment(Fragment fragment, String tag, boolean addToBackStack, boolean animate) {
-        loadFragment(getSupportFragmentManager(), fragment, tag, addToBackStack, R.id.fl_container, false, animate);
-    }
 
-    protected void loadFragment(Fragment fragment, String tag, boolean addToBackStack, boolean clearBackStack, boolean animate) {
-        loadFragment(getSupportFragmentManager(), fragment, tag, addToBackStack, R.id.fl_container, clearBackStack, animate);
-    }
 
-    protected void loadFragmentWithFragmentTanscation(FragmentManager fragmentManager, Fragment fragment, String tag, boolean addToBackStack, boolean animate) {
-        loadFragment(fragmentManager, fragment, tag, addToBackStack, R.id.fl_container, false, animate);
-    }
-
-    protected void loadFragment(Fragment fragment, String tag, int containerId) {
-        loadFragment(fragment, tag, false, containerId);
-    }
-
-    protected void loadFragment(final Fragment fragment, final String tag, final boolean addToBackStack, final int containerId) {
-        loadFragment(getSupportFragmentManager(), fragment, tag, addToBackStack, containerId, false, false);
-    }
-
-    protected void loadFragment(final FragmentManager fragmentManager, Fragment fragment, String tag, int containerId) {
-        loadFragment(fragmentManager, fragment, tag, false, containerId, false, false);
-
-    }
-
-    protected void
-    loadFragment(final FragmentManager fragmentManager, final Fragment fragment, final String tag, final boolean addToBackStack, final int containerId, final boolean clearBackstack, final boolean animate) {
+    protected void  loadFragment(final FragmentManager fragmentManager, final Fragment fragment, final String tag, final boolean addToBackStack, final int containerId, final boolean clearBackstack, final boolean animate) {
         new Handler().post(new Runnable() {
 
             public void run() {
@@ -88,8 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IFragmen
 
                 try {
 
-
-                    if (clearBackstack)
+                 if (clearBackstack)
                         clearBackStackInclusive();
 
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -109,26 +77,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IFragmen
         });
     }
 
-    public void doPopBackStack(String tag) {
-        boolean mIsInfalting = false;
-        try {
-            if (!mIsInfalting) {
-                if (tag != null) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    fm.executePendingTransactions();
-                    FragmentTransaction trans = fm.beginTransaction();
-                    Fragment f = fm.findFragmentByTag(tag);
-                    if (f != null) {
-                        trans.remove(f);
-                        fm.popBackStack(f.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    }
-                    trans.commit();
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+
 
     public void clearBackStackInclusive() {
         boolean mIsInfalting = false;

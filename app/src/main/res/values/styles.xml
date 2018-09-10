@@ -7,9 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-    <style name="TransparentDialogTheme" parent="android:Theme.Holo.Dialog.NoActionBar">
+    <style name="TransparentDialogTheme" parent="android:TextAppearance.DeviceDefault.Large">
         <item name="android:windowBackground">@color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
+
     </style>
 
 
