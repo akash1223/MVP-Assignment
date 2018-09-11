@@ -84,7 +84,7 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.loaddata();
+                presenter.loaddata(true);
             }
         });
         // Configure the refreshing colors
@@ -106,8 +106,10 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         try {
-            presenter.setView(this);
-            presenter.loaddata();
+            if(savedInstanceState==null) {
+                presenter.setView(this);
+                presenter.loaddata(false);
+            }
         }
         catch (Exception ex)
         {
@@ -137,6 +139,13 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
         resultList.addAll(mList);
         listAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void ErrorInDataLoad() {
+        if(swipeContainer.isRefreshing())
+            swipeContainer.setRefreshing(false);
+    }
+
     @Override
     public void showProgressIndicator(boolean show) {
         if(show)
@@ -153,5 +162,10 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
     @Override
     public void showSnackBar(String msg) {
         Snackbar.make(recyclerView, msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public Context getViewContext() {
+        return getContext();
     }
 }

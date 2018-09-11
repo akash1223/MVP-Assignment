@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import assignment.infosys.com.infosysassignment.R;
 import assignment.infosys.com.infosysassignment.apimodel.Facts;
+import assignment.infosys.com.infosysassignment.http.Internet;
 import assignment.infosys.com.infosysassignment.root.BaseView;
 import rx.Observable;
 import rx.Observer;
@@ -14,7 +16,7 @@ import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by user on 03-Mar-18.
+ * Created by user on 10-Set-18.
  */
 
 public class DropBoxPresenter implements DropBoxContractMVP.Presenter {
@@ -28,52 +30,81 @@ public class DropBoxPresenter implements DropBoxContractMVP.Presenter {
     }
 
     @Override
-    public void loaddata() {
-        view.showProgressIndicator(true);
-        subscription = model.result().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Facts>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        if (view != null) {
-                            view.showSnackBar("Error getting movies");
-                        }
-                    }
-
-                    @Override
-                    public void onNext(Facts facts) {
-                        if (view != null) {
-                            view.updateActionbar(facts.getTitle());
-                            List<Facts.Data> mList=new ArrayList<>();
-                            Observable.from(facts.getData())
-                                    .filter(data -> data.getTitle() != null && !data.getTitle().equals(""))
-                                    .subscribe(new Observer<Facts.Data>() {
-                                        @Override
-                                        public void onCompleted() {
-                                            view.showProgressIndicator(false);
-                                            view.updateList(mList);
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-
-                                        }
-
-                                        @Override
-                                        public void onNext(Facts.Data data) {
-                                            mList.add(data);
-                                        }
-                                    });
+    public boolean loaddata(boolean isRefresh) {
+       /* if (!Internet.isNetworkAvailable(view.getViewContext())) {
+            if (view != null) {
+                view.makeToast(R.string.no_internet);
+                view.ErrorInDataLoad();
+            }
+            return false;
+        }*/
+        try {
+            subscription = model.result().subscribeOn(Schedulers.io())
+                    .doOnSubscribe(() -> {
+                        if (!isRefresh)
+                            view.showProgressIndicator(true);
+                    })
+                    .subscribe(new Observer<Facts>() {
+                        @Override
+                        public void onCompleted() {
 
                         }
-                    }
-                });
+
+                        @Override
+                        public void onError(Throwable e) {
+                            e.printStackTrace();
+                            if (view != null) {
+                                view.showSnackBar("Error getting movies");
+                                view.ErrorInDataLoad();
+                            }
+                        }
+
+                        @Override
+                        public void onNext(Facts facts) {
+                            if (view != null) {
+                                view.updateActionbar(facts.getTitle());
+                                filterData(facts.getData());
+
+                            }
+                        }
+                    });
+            return true;
+        } catch (Exception ex) {
+            view.ErrorInDataLoad();
+            return false;
+        }
+
+    }
+
+
+    public boolean filterData(List<Facts.Data> mListData) {
+        try {
+            List<Facts.Data> mList = new ArrayList<>();
+            Observable.from(mListData)
+                    .filter(data -> data.getTitle() != null && !data.getTitle().equals(""))
+                    .subscribe(new Observer<Facts.Data>() {
+                        @Override
+                        public void onCompleted() {
+                            view.showProgressIndicator(false);
+                            view.updateList(mList);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (view != null)
+                                view.showSnackBar("Error in data load");
+                        }
+
+                        @Override
+                        public void onNext(Facts.Data data) {
+                            mList.add(data);
+                        }
+                    });
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+
     }
 
     @Override

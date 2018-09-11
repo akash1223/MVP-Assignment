@@ -31,7 +31,8 @@ public class Facts {
         this.data = data;
     }
 
-    public class Data {
+
+    public static class Data {
 
         @SerializedName("title")
         @Expose
@@ -42,6 +43,12 @@ public class Facts {
         @SerializedName("imageHref")
         @Expose
         private String imageHref;
+
+        public Data(String title, String description, String imageHref) {
+            this.title = title;
+            this.description = description;
+            this.imageHref = imageHref;
+        }
 
         public String getTitle() {
             return title;
