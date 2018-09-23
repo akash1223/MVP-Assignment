@@ -13,8 +13,8 @@ import dagger.Provides;
 @Module
 public class DropBoxModule {
     @Provides
-    public DropBoxContractMVP.Presenter provideTopDropBoxPresenter(DropBoxContractMVP.Model topMoviesModel) {
-        return new DropBoxPresenter(topMoviesModel);
+    public DropBoxContractMVP.Presenter provideTopDropBoxPresenter(DropBoxContractMVP.Model dropBoxModel) {
+        return new DropBoxPresenter(dropBoxModel);
     }
 
     @Provides

@@ -1,5 +1,7 @@
 package assignment.infosys.com.infosysassignment.dropbox;
 
+import android.app.FragmentManager;
+
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,18 +18,22 @@ public class DropBoxActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FragmentDropBox fragmentDropBox=FragmentDropBox.newInstance();
-        onFragmentLoadRequest(fragmentDropBox, "FragmentDropBox", false, true);
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        FragmentDropBox mDropFragment = (FragmentDropBox) fm.findFragmentByTag("FragmentDropBox");
+        if(mDropFragment==null) {
+            mDropFragment = FragmentDropBox.newInstance();
+            onFragmentLoadRequest(mDropFragment, "FragmentDropBox", false, true);
+        }
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        getSupportActionBar().setTitle("DropBox");
+        getSupportActionBar().setTitle(mDropFragment.actionBarTitle);
 
     }
+
 
     @Override
     public void onFragmentLoadRequest(Fragment fragment, String tag, boolean addToBackStack, boolean animate) {
         loadFragment(fragment, tag, addToBackStack, animate);
     }
-
 
     @Override
     public void onDataReceivedFromFragment(Bundle bundle) {
