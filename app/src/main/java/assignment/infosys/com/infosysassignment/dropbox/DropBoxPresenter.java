@@ -31,13 +31,13 @@ public class DropBoxPresenter implements DropBoxContractMVP.Presenter {
 
     @Override
     public boolean loaddata(boolean isRefresh) {
-        if (!Internet.isNetworkAvailable(view.getViewContext())) {
+       /* if (!Internet.isNetworkAvailable(view.getViewContext())) {
             if (view != null) {
                 view.makeToast(R.string.no_internet);
                 view.ErrorInDataLoad();
             }
             return false;
-        }
+        }*/
         try {
             subscription = model.result().subscribeOn(Schedulers.io())
                     .doOnSubscribe(() -> {
