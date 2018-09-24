@@ -40,6 +40,7 @@ public class DropBoxPresenter implements DropBoxContractMVP.Presenter {
         }*/
         try {
             subscription = model.result().subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(() -> {
                         if (!isRefresh)
                             view.showProgressIndicator(true);
@@ -54,7 +55,7 @@ public class DropBoxPresenter implements DropBoxContractMVP.Presenter {
                         public void onError(Throwable e) {
                             e.printStackTrace();
                             if (view != null) {
-                                view.showSnackBar("Error getting movies");
+                                view.showSnackBar("Error getting Data");
                                 view.ErrorInDataLoad();
                             }
                         }

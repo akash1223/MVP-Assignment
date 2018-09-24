@@ -33,8 +33,11 @@ import butterknife.Unbinder;
 
 public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.View{
 
+
     BropboxRecyclerViewAdapter listAdapter;
     private List<Facts.Data> resultList=new ArrayList<>();
+
+    public String actionBarTitle="Drop Bax";
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
@@ -59,8 +62,9 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setRetainInstance(true);
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
         ((BaseApplication) getActivity().getApplication()).getComponent().inject(this);
     }
 
@@ -128,6 +132,7 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
 
     @Override
     public void updateActionbar(String title) {
+        actionBarTitle=title;
         iFragmentCallback.toolbarTitle(title);
 
     }
