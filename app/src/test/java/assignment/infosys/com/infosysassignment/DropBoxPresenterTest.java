@@ -8,12 +8,13 @@ import java.util.List;
 import assignment.infosys.com.infosysassignment.apimodel.Facts;
 import assignment.infosys.com.infosysassignment.dropbox.DropBoxContractMVP;
 import assignment.infosys.com.infosysassignment.dropbox.DropBoxPresenter;
+import assignment.infosys.com.infosysassignment.dropbox.DropBoxRepository;
 
 import static org.mockito.Mockito.*;
 
 public class DropBoxPresenterTest {
 
-    DropBoxContractMVP.Model mockDropBoxModel;
+    DropBoxRepository mockDropBoxRepository;
     DropBoxContractMVP.View mockView;
     DropBoxPresenter presenter;
     List<Facts.Data> mData;
@@ -21,13 +22,13 @@ public class DropBoxPresenterTest {
     @Before
     public void setup() {
 
-        mockDropBoxModel = mock(DropBoxContractMVP.Model.class);
+        mockDropBoxRepository = mock(DropBoxRepository.class);
 
         mData=getMockdata();
 
         mockView = mock(DropBoxContractMVP.View.class);
 
-        presenter = new DropBoxPresenter(mockDropBoxModel);
+        presenter = new DropBoxPresenter(mockDropBoxRepository);
 
         presenter.setView(mockView);
 

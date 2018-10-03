@@ -15,10 +15,10 @@ import assignment.infosys.com.infosysassignment.R;
 /**
  * Created by akash on 2016-02-16.
  */
-public class CustProgressDialog extends Dialog {
+public class CircularProgressDialog extends Dialog {
 
     Context context;
-    public CustProgressDialog(Context context) {
+    public CircularProgressDialog(Context context) {
 
         super(context,R.style.TransparentDialogTheme);
         this.context=context;

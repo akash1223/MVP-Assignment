@@ -6,7 +6,7 @@ import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-public class DropBoxRepository implements Repository {
+public class DropBoxRepository   {
 
 
     HttpApi mHttpApi;
@@ -15,7 +15,7 @@ public class DropBoxRepository implements Repository {
       this.mHttpApi=mHttpApi;
     }
 
-    @Override
+
     public Observable<Facts> getFactsFromNetwork() {
         Observable<Facts> dropBoxObservable = mHttpApi.getFacts();
 

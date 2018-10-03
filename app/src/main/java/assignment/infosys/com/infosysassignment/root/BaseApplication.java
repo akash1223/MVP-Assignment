@@ -12,7 +12,7 @@ import assignment.infosys.com.infosysassignment.http.ApiModule;
 public class BaseApplication extends Application {
 
 
-    private BaseActivity mCurrentActivity;
+
 
     private static Context appContext;
     public static BaseApplication mInstance;
@@ -24,9 +24,7 @@ public class BaseApplication extends Application {
         return mInstance;
     }
 
-    public void setCurrentActivity(BaseActivity baseActivity) {
-        mCurrentActivity = baseActivity;
-    }
+
 
     public static Context getBaseApplicationContext() {
         return appContext;

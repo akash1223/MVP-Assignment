@@ -24,34 +24,39 @@ import javax.inject.Inject;
 
 import assignment.infosys.com.infosysassignment.R;
 import assignment.infosys.com.infosysassignment.apimodel.Facts;
+import assignment.infosys.com.infosysassignment.custom_control.CircularLoader;
+import assignment.infosys.com.infosysassignment.http.HttpApi;
 import assignment.infosys.com.infosysassignment.root.BaseApplication;
-import assignment.infosys.com.infosysassignment.root.BaseFragment;
+import assignment.infosys.com.infosysassignment.root.IFragmentCallback;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.View{
+public class FragmentDropBox extends Fragment implements DropBoxContractMVP.View {
 
 
     BropboxRecyclerViewAdapter listAdapter;
-    private List<Facts.Data> resultList=new ArrayList<>();
+    private List<Facts.Data> resultList = new ArrayList<>();
 
-    public String actionBarTitle="Drop Bax";
+    public String actionBarTitle = "Drop Bax";
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
     @BindView(R.id.swipeContainer)
     SwipeRefreshLayout swipeContainer;
 
-
+    protected IFragmentCallback iFragmentCallback;
+    protected Context mContext;
+    protected CircularLoader proDialog;
     private Unbinder unbinder;
+
+    @Inject
+    protected HttpApi mAPI;
 
     @Inject
     DropBoxContractMVP.Presenter presenter;
 
-    public FragmentDropBox() {
-    }
 
     public static FragmentDropBox newInstance() {
         FragmentDropBox fragment = new FragmentDropBox();
@@ -71,18 +76,27 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_dropbox, container, false);
+        View view = inflater.inflate(R.layout.fragment_dropbox, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+        proDialog = new CircularLoader(mContext);
+        ((BaseApplication) getActivity().getApplication()).getComponent().inject(this);
+        iFragmentCallback = (IFragmentCallback) context;
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-       // super.onViewCreated(view, savedInstanceState);
-        listAdapter=new BropboxRecyclerViewAdapter(resultList);
+        // super.onViewCreated(view, savedInstanceState);
+        listAdapter = new BropboxRecyclerViewAdapter(resultList);
         recyclerView.setAdapter(listAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -100,24 +114,18 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
 
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         try {
-            if(savedInstanceState==null) {
-                presenter.setView(this);
+            presenter.setView(this);
+            if (savedInstanceState == null) {
+
                 presenter.loaddata(false);
             }
-        }
-        catch (Exception ex)
-        {
-            Log.e("Error:",ex.toString());
+        } catch (Exception ex) {
+            Log.e("Error:", ex.toString());
         }
 
 
@@ -132,14 +140,15 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
 
     @Override
     public void updateActionbar(String title) {
-        actionBarTitle=title;
+        actionBarTitle = title;
         iFragmentCallback.toolbarTitle(title);
 
     }
+
     @Override
     public void updateList(List<Facts.Data> mList) {
-        if(swipeContainer.isRefreshing())
-        swipeContainer.setRefreshing(false);
+        if (swipeContainer.isRefreshing())
+            swipeContainer.setRefreshing(false);
         resultList.clear();
         resultList.addAll(mList);
         listAdapter.notifyDataSetChanged();
@@ -147,13 +156,13 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
 
     @Override
     public void ErrorInDataLoad() {
-        if(swipeContainer.isRefreshing())
+        if (swipeContainer.isRefreshing())
             swipeContainer.setRefreshing(false);
     }
 
     @Override
     public void showProgressIndicator(boolean show) {
-        if(show)
+        if (show)
             proDialog.Loadershow();
         else
             proDialog.Loadermiss();
@@ -161,7 +170,7 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
 
     @Override
     public void makeToast(int message) {
-        Toast.makeText(getContext(),message,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -173,4 +182,16 @@ public class FragmentDropBox extends BaseFragment implements DropBoxContractMVP.
     public Context getViewContext() {
         return getContext();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mContext != null)
+            mContext = null;
+        if (proDialog != null)
+            proDialog = null;
+        if (iFragmentCallback != null)
+            iFragmentCallback = null;
+    }
+
 }

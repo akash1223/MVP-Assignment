@@ -2,17 +2,14 @@ package assignment.infosys.com.infosysassignment.dropbox;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import assignment.infosys.com.infosysassignment.R;
 import assignment.infosys.com.infosysassignment.apimodel.Facts;
 import assignment.infosys.com.infosysassignment.http.Internet;
-import assignment.infosys.com.infosysassignment.root.BaseView;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**
@@ -23,10 +20,10 @@ public class DropBoxPresenter implements DropBoxContractMVP.Presenter {
 
     private DropBoxContractMVP.View view;
     private Subscription subscription = null;
-    private DropBoxContractMVP.Model model;
+    private DropBoxRepository repository;
 
-    public DropBoxPresenter(DropBoxContractMVP.Model model) {
-        this.model = model;
+    public DropBoxPresenter(DropBoxRepository repository) {
+        this.repository = repository;
     }
 
     @Override
@@ -39,7 +36,7 @@ public class DropBoxPresenter implements DropBoxContractMVP.Presenter {
             return false;
         }
         try {
-            subscription = model.result().subscribeOn(Schedulers.io())
+            subscription = repository.getFactsFromNetwork().subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(() -> {
                         if (!isRefresh)
@@ -118,7 +115,7 @@ public class DropBoxPresenter implements DropBoxContractMVP.Presenter {
     }
 
     @Override
-    public void setView(BaseView view) {
+    public void setView(DropBoxContractMVP.View view) {
         this.view = (DropBoxContractMVP.View) view;
     }
 }

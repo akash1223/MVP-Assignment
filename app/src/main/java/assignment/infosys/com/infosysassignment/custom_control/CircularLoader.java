@@ -5,9 +5,9 @@ import android.content.Context;
 /**
  * Created by user on 17-10-16.
  */
-public class CustLoader extends CustProgressDialog {
+public class CircularLoader extends CircularProgressDialog {
 
-    public CustLoader(Context context)
+    public CircularLoader(Context context)
     {
         super(context);
     }
